@@ -1,7 +1,0 @@
-{
-  "name": "Testname Start on Heroku: Python",
-  "description": "here goes the description",
-  "image": "heroku/python",
-  "repository": "https://github.com/iwaynee/paste-tube",
-  "keywords": ["python"]
-}
