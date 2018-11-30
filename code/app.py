@@ -57,4 +57,4 @@ if __name__ == '__main__':
     port = os.environ.get('PORT', 8080)
 
     # Run the app.
-    run(host='localhost', port=port)
+    run(host='0.0.0.0', port=port)
