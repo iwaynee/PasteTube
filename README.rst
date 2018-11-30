@@ -1,58 +1,10 @@
-Hello World for Bottle
+PasteTube
 ======================
 
-In this tutorial, we'll create a web app and deploy it to Heroku, using
-`Bottle <http://bottlepy.org/docs/dev/>`_.
+This Appliaction makes it easy to sync your Copy&Paste Data from
+diffrent Devices.
 
-
-tl;dr
------
-
-Want to jump right in? You can quickly get a copy of this app in your
-Heroku account at `python.heroku.com <http://python.heroku.com>`_.
-
-
-Ready?
-------
-
-Before we start, you need a Heroku `account <https://api.heroku.com/signup>`_ and `toolbelt <http://toolbelt.herokuapp.com/>`_.
-
-
-Act I: Build.
--------------
-
-1. Make sure you're using a virtualenv::
-
-    $ virtualenv --no-site-packages venv
-    $ source venv/bin/activate
-
-2. Install your dependencies::
-
-    $ pip install bottle
-
-3. Say Hello to the World in ``app.py``::
-
-    import os
-    from bottle import route, run
-
-    @route('/hello/:name')
-    def index(name='World'):
-        return '<b>Hello %s!</b>' % name
-
-Simple enough.
-
-Now, we need to serve our app locally. On Heroku, your application's port is available
-as an `environment variable <http://en.wikipedia.org/wiki/Environment_variable>`_.
-
-So, we can grab the port we need to run it on Heroku, and default when that's not defined (locally)::
-
-    # Get required port, default to 5000.
-    port = os.environ.get('PORT', 5000)
-
-And, we can bind to the port::
-
-    # Run the app.
-    run(host='0.0.0.0', port=port)
+Go to the `App <http://paste-tube.herokuapp.com/>`_.
 
 
 Act II: Try.
