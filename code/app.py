@@ -1,10 +1,20 @@
 import os
 from bottle import route, run, get, request
 import uuid
-import json
 
 
 userdict = {}
+
+
+errors = {
+    0x01: "Success",
+    0x02: "No Mac-Adress",
+    0x03: "No UserId in request",
+    0x04: "UserId is not in Database",
+    0x05: "Device already in Database",
+    0x06: "No Data in request",
+    0x07: "Device is not connectd yet"
+}
 
 
 # HomeSite ############################################################################################################
@@ -35,8 +45,8 @@ def index():
     }
 
     response = {
-        "status": 0x01,
-        "user-id": userid
+        "state": 0x01,
+        "userid": userid
     }
 
     return response
@@ -47,23 +57,23 @@ def index():
     # Get MAC
     mac_adress = request.params.get("mac")
     if mac_adress == None:
-        response = { "status" : 0x02,
-                     "error" : "No Mac-Adress"}
+        response = { "state" : 0x02,
+                     "error" : errors[0x02]}
 
         return response
 
     # Get UserId
     userid = request.params.get("userid")
     if userid == None:
-        response = { "status" : 0x03,
-                     "error" : "No UserId"}
+        response = { "state" : 0x03,
+                     "error" : errors[0x03]}
 
         return response
 
     # Check if Userid is in Database
     if userid not in userdict.keys():
-        response = { "status" : 0x04,
-                     "error" : "UserId is not in Database"}
+        response = { "state" : 0x04,
+                     "error" : errors[0x04]}
 
         return response
 
@@ -71,8 +81,8 @@ def index():
     devices = userdict[userid]["devices"]
     for device in devices:
         if device["ip"] == request.remote_addr and device["mac"] == mac_adress:
-            response = {"status": 0x05,
-                        "error": "Device already in Database"}
+            response = {"state": 0x05,
+                        "error": errors[0x05]}
 
             return response
 
@@ -82,7 +92,7 @@ def index():
     })
 
     response = {
-        "status": 0x01
+        "state": 0x01
     }
 
     return response
@@ -93,19 +103,19 @@ def index():
     # Get UserId
     userid = request.params.get("userid")
     if userid == None:
-        response = { "status" : 0x03,
-                     "error" : "No UserId"}
+        response = { "state" : 0x03,
+                     "error" : errors[0x03] }
 
         return response
 
     # Check if Userid is in Database
     if userid not in userdict.keys():
-        response = { "status" : 0x04,
-                     "error" : "UserId is not in Database"}
+        response = { "state" : 0x04,
+                     "error" : errors[0x04]}
 
         return response
 
-    response = { "status" : 0x01,
+    response = { "state" : 0x01,
                  "devices" : userdict[userid]["devices"]}
 
     return response
@@ -116,20 +126,35 @@ def index():
     # Get UserId
     userid = request.params.get("userid")
     if userid == None:
-        response = { "status" : 0x03,
-                     "error" : "No UserId"}
+        response = { "state" : 0x03,
+                     "error" : errors[0x03]}
+
+        return response
+
+    # Check if connected
+    connected = False
+    devices = userdict[userid]["devices"]
+    for device in devices:
+        if device["ip"] == request.remote_addr:
+            connected = True
+
+    if connected == False:
+        response = {"state": 0x07,
+                    "error": errors[0x07]}
 
         return response
 
     # Get Data
     data = request.params.get("data")
     if data == None:
-        response = { "status" : 0x05,
-                     "error" : "No Data in request"}
+        response = { "state" : 0x06,
+                     "error" : errors[0x06]}
+
+        return response
 
     userdict[userid]["data"] = data
 
-    response = { "status" : 0x01}
+    response = { "state" : 0x01}
 
     return response
 
@@ -140,12 +165,12 @@ def index():
     # Get UserId
     userid = request.params.get("userid")
     if userid == None:
-        response = {"status": 0x03,
-                    "error": "No UserId"}
+        response = {"state": 0x03,
+                    "error": 0x03}
 
         return response
 
-    response = {"status": 0x01,
+    response = {"state": 0x01,
                 "data" : userdict[userid]["data"]}
 
     return response
