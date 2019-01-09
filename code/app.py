@@ -22,7 +22,7 @@ errors = {
 def index():
     html = ""
 
-    with open("index.html", 'r') as file:
+    with open( os.path.dirname(__file__) + "/index.html", 'r') as file:
         html = file.read()
 
     return html
