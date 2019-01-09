@@ -1,7 +1,7 @@
 import os
 from bottle import route, run, get, request
 import uuid
-
+import psycopg2
 
 userdict = {}
 
@@ -15,6 +15,9 @@ errors = {
     0x06: "No Data in request",
     0x07: "Device is not connectd yet"
 }
+
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 
 # HomeSite ############################################################################################################
@@ -180,6 +183,14 @@ def index():
     for i in userdict.keys():
         response += "User ID : " + i + "<br>" \
                     "_____________________ <br>" + str(userdict[i]["data"]) + "<br><br>"
+
+    cur = conn.cursor()
+    cur.execute("""SELECT * from *""")
+    rows = cur.fetchall()
+
+    print("\nShow me the databases:\n")
+    for row in rows:
+        print("   ", row[0])
 
 
     return response
