@@ -185,7 +185,7 @@ def index():
                     "_____________________ <br>" + str(userdict[i]["data"]) + "<br><br>"
 
     cur = conn.cursor()
-    cur.execute("""SELECT * from *""")
+    cur.execute("""SELECT * from pg_database""")
     rows = cur.fetchall()
 
     print("\nShow me the databases:\n")
