@@ -20,15 +20,10 @@ errors = {
 # HomeSite ############################################################################################################
 @route('/')
 def index():
+    html = ""
 
-    html = '<!DOCTYPE html>' \
-           '<html>' \
-           '<head>' \
-           '<title>PasteTube</title>' \
-           '</head>' \
-           '<body>' \
-           '<p>No public Website - PasteTube Team</p>' \
-           '</body>'
+    with open("index.html", 'r') as file:
+        html = file.read()
 
     return html
 
